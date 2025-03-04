@@ -66,28 +66,47 @@ En nuestro caso, utilizamos un **`bounce_delay`** de 300 ms para garantizar que 
 
 ### Código A
 
+A continuación, se presenta el código utilizado para la implementación de la interrupción en el ESP32:
+
 ```cpp
 #include <Arduino.h>
 
-int LED_BUILTIN = 23;
-int DELAY = 500;
-int count = 0;
+#define DELAY 500
 
-void IRAM_ATTR isr() {
-  Serial.println("Interrupted");
-  count = 0;
+struct Button {
+  const uint8_t PIN;
+  volatile uint32_t numberKeyPresses;
+  volatile bool pressed;
+};
+
+volatile Button button1 = {38, 0, false};
+
+void IRAM_ATTR isr() {  // Usa IRAM_ATTR solo si estás en ESP32
+  button1.numberKeyPresses += 1;
+  button1.pressed = true;
 }
 
 void setup() {
-  pinMode(LED_BUILTIN, INPUT_PULLUP);
-  Serial.begin(115200);
-  attachInterrupt(LED_BUILTIN, isr, FALLING);
+  Serial.begin(9600);  // dejar 9600 para mostrar los datos correctos por pantalla
+  pinMode(button1.PIN, INPUT_PULLUP);
+  attachInterrupt(button1.PIN, isr, FALLING);
 }
 
 void loop() {
-  for (count; count < 1000; count++) {
-    Serial.println(count);
-    delay(DELAY);
+  if (button1.pressed) {
+    Serial.printf("Button 1 has been pressed %u times\n", button1.numberKeyPresses);
+    button1.pressed = false;
+  }
+
+  // Detach Interrupt after 1 Minute
+  static uint32_t lastMillis = 0;
+  static bool detached = false;
+
+  if (!detached && millis() - lastMillis > 60000) {
+    lastMillis = millis();
+    detachInterrupt(button1.PIN);
+    Serial.println("Interrupt Detached!");
+    detached = true;
   }
 }
 ```
