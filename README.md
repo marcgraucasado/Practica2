@@ -46,8 +46,23 @@ void IRAM_ATTR ISR() {
   // Declaraciones;
 }
 ```
+## Observaciones:
 
-El identificador `IRAM_ATTR` es recomendado por Espressif para colocar este fragmento de código en la memoria RAM interna en lugar de la flash. Esto asegura una ejecución más rápida y un servicio de interrupción más eficiente.
+###  **`void IRAM`**
+- **`IRAM_ATTR`** se usa para indicar que una función debe ser almacenada en la memoria **IRAM** del ESP32.
+- La **IRAM** (Internal RAM) es una memoria rápida y eficiente que se utiliza para funciones que deben ejecutarse rápidamente, como las funciones de **interrupción**.
+- Cuando se configura una función como `IRAM_ATTR`, se garantiza que esta funcione con la menor latencia posible, especialmente cuando se trata de interrupciones generadas por eventos de alta velocidad (por ejemplo, un cambio de estado en un botón).
+- En el contexto de interrupciones, este tipo de memoria es fundamental para evitar retrasos en el procesamiento de eventos rápidos y críticos.
+- El identificador `IRAM_ATTR` es recomendado por Espressif para colocar este fragmento de código en la memoria RAM interna en lugar de la flash. Esto asegura una ejecución más rápida y un servicio de interrupción más eficiente.
+
+## Observaciones sobre el Contador de Pulsaciones:
+
+El **contador** cuenta de más porque también registra los **rebotes** que ocurren en los flancos del botón. Los rebotes son señales erráticas generadas cuando el botón cambia de estado, lo que puede hacer que una sola pulsación se registre varias veces.
+
+Para evitar este problema, es necesario **reducir el "tiempo de reacción"** utilizando un filtro que ignore los cambios rápidos que ocurren en los rebotes. Una forma común de hacerlo es **filtrar los rebotes** durante unos 300 ms, asegurando que solo se registre una pulsación después de que el botón se haya estabilizado.
+
+En nuestro caso, utilizamos un **`bounce_delay`** de 300 ms para garantizar que el contador solo registre **una pulsación por vez**, eliminando los rebotes y asegurando que el botón se cuente correctamente.
+
 
 ### Código A
 
@@ -140,3 +155,11 @@ void loop() {
   }
 }
 ```
+## Observaciones:
+
+### 2B. **Reloj e `int timer`**
+
+- **`int timer`** es una variable de tipo entero que se usa para mantener un conteo de unidades de tiempo o para realizar una acción repetitiva después de ciertos intervalos.
+- El concepto de **reloj** en este contexto se refiere a la capacidad de medir y gestionar el paso del tiempo sin bloquear la ejecución del programa.
+- **`millis()`** es una función que devuelve el número de milisegundos transcurridos desde que el programa comenzó a ejecutarse, lo que permite gestionar los temporizadores sin necesidad de bloquear el código (como lo haría un `delay()`).
+- Al comparar el tiempo actual con un valor anterior (`previousMillis`), se puede ejecutar un bloque de código cada vez que transcurre un intervalo específico, creando así un "reloj" que activa acciones a intervalos regulares.
