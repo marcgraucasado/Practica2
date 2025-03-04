@@ -1,6 +1,8 @@
 ## Sugerencia de Prompt
 
-Quiero hacer un programa para **Arduino ESP32** en el entorno de **PlatformIO**, que controle un **LED** y dos **pulsadores** utilizando **interrupciones de un temporizador**. El LED debe parpadear a una frecuencia inicial y, si pulsamos un pulsador, la frecuencia de parpadeo debe subir. Si pulsamos el otro pulsador, dicha frecuencia debe bajar. Además, se debe garantizar que los pulsadores que se deben leer en el temporizador se filtran para evitar rebotes.
+Quiero hacer un programa para **Arduino ESP32** en el entorno de **PlatformIO**, que controle un **LED** y dos **pulsadores** utilizando **interrupciones de un temporizador**. 
+El LED debe parpadear a una frecuencia inicial y, si pulsamos un pulsador, la frecuencia de parpadeo debe subir. Si pulsamos el otro pulsador, dicha frecuencia debe bajar.
+Además, se debe garantizar que los pulsadores que se deben leer en el temporizador se filtran para evitar rebotes.
 
 ```cpp
 #include <Arduino.h>
