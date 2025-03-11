@@ -1,6 +1,6 @@
-# Práctica 2-MarcGrau: Interrupciones
+# PR2 2-MarcGrau
 
-## Tipos de Interrupciones
+## PRÁCTICA 2: TIPOS DE INTERRUPCIONES
 
 Existen tres tipos de eventos que pueden desencadenar una interrupción: eventos de hardware, eventos programados o temporizadores, y llamadas por software. Sin embargo, en Arduino, solo se admiten las interrupciones de hardware y de temporizadores.
 
