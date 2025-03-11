@@ -1,4 +1,4 @@
-# PR2 2-MarcGrau
+# PR2-MarcGrau
 
 ## PRÁCTICA 2: TIPOS DE INTERRUPCIONES
 
